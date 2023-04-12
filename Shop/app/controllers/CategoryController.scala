@@ -1,6 +1,6 @@
 package controllers
 
-import controllers.global.categories
+import controllers.global.{categories, products}
 import play.api.libs.json.{Json, Writes}
 import play.api.mvc._
 
@@ -19,6 +19,13 @@ class CategoryController @Inject()(cc: ControllerComponents) extends AbstractCon
       "Name" -> category.name
     )
   }
+  implicit val productWrites = new Writes[Product] {
+    def writes(product: Product) = Json.obj(
+      "Id"  -> product.id,
+      "Name" -> product.name,
+      "Category" -> product.category
+    )
+  }
   /**
    * Create an Action to render an HTML page with a welcome message.
    * The configuration in the `routes` file means that this method
@@ -30,7 +37,9 @@ class CategoryController @Inject()(cc: ControllerComponents) extends AbstractCon
     Ok(result)
   }
   def getSingle(id: Int) = Action {
-    val result = Json.toJson(categories.filter(_.id == id))
+    val cat = categories.filter(_.id == id)
+    val result = Json.toJson(products.filter(_.category == cat(0).name))
+
     Ok(result)
   }
   def post(id: Int, name: String) = Action {
