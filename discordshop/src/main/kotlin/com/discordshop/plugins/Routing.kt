@@ -7,8 +7,9 @@ import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
-
+const val CHANNEL_NAME = "#shop-bot"
 fun Application.configureRouting() {
+
     routing {
         post("/category") {
             val category = call.receive<Category>()
@@ -29,26 +30,20 @@ fun Application.configureRouting() {
             call.respond(dao.allOrders())
 
         }
-        get("/payment"){
-            call.respond(dao.allPayments())
-
+        route("/payment"){
+            get {              call.respond(dao.allPayments())
+            }
+            post { val payment = call.receive<Payment>()
+                dao.addPayment(payment)
+                call.respond(payment) }
+            put {val payment = call.receive<Payment>()
+                dao.updatePayment(payment)
+                call.respond(payment)  }
         }
-
         post("/cart"){
             val cart = call.receive<List<Order>>()
             dao.addOrders(cart)
             call.respond(cart)
-        }
-
-        post("/payment"){
-            val payment = call.receive<Payment>()
-            dao.addPayment(payment)
-            call.respond(payment)
-        }
-        put("/payment"){
-            val payment = call.receive<Payment>()
-            dao.updatePayment(payment)
-            call.respond(payment)
         }
 
         post("/slack/category" ) {
@@ -61,14 +56,14 @@ fun Application.configureRouting() {
                     result += it.id.toString() + ". " + it.name + "\n"
                 }
                 val response = slack.methods(token).chatPostMessage {
-                    it.channel("#shop-bot")
+                    it.channel(CHANNEL_NAME)
                         .text(result)
                 }
                 call.respondText("Response is: $response")
             }
             else{
                 val response = slack.methods(token).chatPostMessage {
-                    it.channel("#shop-bot")
+                    it.channel(CHANNEL_NAME)
                         .text("There are no categories yet!")
                 }
                 call.respondText("Response is: $response")
@@ -86,14 +81,14 @@ fun Application.configureRouting() {
                     result += it.id.toString() + ". " + it.name + "\n"
                 }
                 val response = slack.methods(token).chatPostMessage {
-                    it.channel("#shop-bot")
+                    it.channel(CHANNEL_NAME)
                         .text(result)
                 }
                 call.respondText("Response is: $response")
             }
             else{
                 val response = slack.methods(token).chatPostMessage {
-                    it.channel("#shop-bot")
+                    it.channel(CHANNEL_NAME)
                         .text("There are no products for that category yet!")
                 }
                 call.respondText("Response is: $response")

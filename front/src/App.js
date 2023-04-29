@@ -3,10 +3,9 @@ import Products from "./Components/Products";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Cart from "./Components/Cart";
 import Payments from "./Components/Payments";
-import {useEffect, useState} from "react";
-import axios from "axios";
+import {useState} from "react";
 import Navbar from "./navbar/Navbar";
-import {Order} from "./models/Order";
+
 function App() {
 
     const [cart, setCart] = useState([]);
