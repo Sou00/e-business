@@ -58,7 +58,7 @@ class DAOFacadeImpl : DAOFacade {
         TODO("Not yet implemented")
     }
 
-    override suspend fun addOrders(orders: List<Order>): List<Order>? = dbQuery{
+    override suspend fun addOrders(orders: List<Order>): List<Order> = dbQuery{
         val res = mutableListOf<Order>()
         var sum = 0.0
         var seqId = 0

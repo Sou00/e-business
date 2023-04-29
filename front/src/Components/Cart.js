@@ -1,7 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import axios from "axios";
-import {Payment} from "../models/Payment";
 
 
 export default function Cart({cart, setCart}){
