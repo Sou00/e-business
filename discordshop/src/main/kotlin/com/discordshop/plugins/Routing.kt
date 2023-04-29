@@ -1,32 +1,60 @@
 package com.discordshop.plugins
 
-import com.discordshop.Category
-import com.discordshop.Global
-import com.discordshop.Product
+import com.discordshop.dao.dao
+import com.discordshop.models.*
 import com.slack.api.Slack
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
-import java.lang.System.getenv
 
 fun Application.configureRouting() {
     routing {
         post("/category") {
             val category = call.receive<Category>()
-            Global.categories.add(category)
+            dao.addCategory(category)
             call.respond(category)
         }
         post("/product"){
 
             val product = call.receive<Product>()
-            Global.products.add(product)
+            dao.addProduct(product)
             call.respond(product)
         }
+        get("/product"){
+            call.respond(dao.allProducts())
+        }
+
+        get("/order"){
+            call.respond(dao.allOrders())
+
+        }
+        get("/payment"){
+            call.respond(dao.allPayments())
+
+        }
+
+        post("/cart"){
+            val cart = call.receive<List<Order>>()
+            dao.addOrders(cart)
+            call.respond(cart)
+        }
+
+        post("/payment"){
+            val payment = call.receive<Payment>()
+            dao.addPayment(payment)
+            call.respond(payment)
+        }
+        put("/payment"){
+            val payment = call.receive<Payment>()
+            dao.updatePayment(payment)
+            call.respond(payment)
+        }
+
         post("/slack/category" ) {
             val token = System.getenv("SLACK_TOKEN")
             val slack = Slack.getInstance()
-            val categories = Global.categories
+            val categories = dao.allCategories()
             if (categories.isNotEmpty()) {
                 var result = "Categories:\n"
                 categories.forEach {
@@ -51,7 +79,7 @@ fun Application.configureRouting() {
             val text = formParameters["text"].toString()
             val token = System.getenv("SLACK_TOKEN")
             val slack = Slack.getInstance()
-            val products = Global.products.filter { it.category == text }
+            val products = dao.allProducts().filter { it.category == text }
             if(products.isNotEmpty()) {
                 var result = text + "\n"
                 products.forEach {

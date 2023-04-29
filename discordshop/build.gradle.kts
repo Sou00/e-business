@@ -2,7 +2,8 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val slack_version: String by project
-
+val exposed_version: String by project
+val h2_version: String by project
 
 plugins {
     kotlin("jvm") version "1.6.0"
@@ -32,4 +33,9 @@ dependencies {
     implementation ("com.slack.api:slack-api-client:$slack_version")
     implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-server-cors:$ktor_version")
+    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("com.h2database:h2:$h2_version")
 }
