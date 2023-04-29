@@ -13,7 +13,7 @@ export default function Cart({cart, setCart}){
     }
     return ( <div>
             {cart.map((order) => (
-                <div>
+                <div key={order.id}>
                     {JSON.stringify(order)}
                     <button onClick={() => deleteItem(order.productId)}>Delete</button>
 

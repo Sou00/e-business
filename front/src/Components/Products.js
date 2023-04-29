@@ -1,5 +1,4 @@
-import React, {useRef} from 'react';
-import { useState, useEffect } from 'react';
+import React,{useRef, useState, useEffect } from 'react';
 import axios from "axios";
 import {Product} from '../models/Product'
 import {Order} from "../models/Order";
@@ -51,7 +50,7 @@ const buyItem = (product)=>{
 
 }
     return ( <div>{products.map((product) => (
-        <div>
+        <div key={product.id}>
             {JSON.stringify(product)}
             <button onClick={() => buyItem(product)}>Buy</button>
         </div>
