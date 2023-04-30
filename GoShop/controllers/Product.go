@@ -57,7 +57,7 @@ type UpdateProductInput struct {
 func UpdateProduct(c *gin.Context) {
 	var product models.Product
 	if err := models.DB.Where(queryId, c.Param("id")).First(&product).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": errorNotFound})
 		return
 	}
 
@@ -77,7 +77,7 @@ func UpdateProduct(c *gin.Context) {
 func DeleteProduct(c *gin.Context) {
 	var product models.Product
 	if err := models.DB.Where(queryId, c.Param("id")).First(&product).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": errorNotFound})
 		return
 	}
 

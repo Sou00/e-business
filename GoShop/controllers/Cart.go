@@ -7,6 +7,8 @@ import (
 	"strconv"
 )
 
+const errorNotFound = "record not found"
+
 func CreateCart(c *gin.Context) {
 
 	cart := models.Cart{Total: 0}
@@ -18,7 +20,7 @@ func CreateCart(c *gin.Context) {
 func GetCart(c *gin.Context) {
 	var cart models.Cart
 
-	if err := models.DB.Preload("Products.Category").Where("id = ?", c.Param("id")).First(&cart).Error; err != nil {
+	if err := models.DB.Preload("Products.Category").Where(queryId, c.Param("id")).First(&cart).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
@@ -38,8 +40,8 @@ type UpdateCartInput struct {
 
 func UpdateCart(c *gin.Context) {
 	var cart models.Cart
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&cart).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
+	if err := models.DB.Where(queryId, c.Param("id")).First(&cart).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": errorNotFound})
 		return
 	}
 
@@ -48,7 +50,7 @@ func UpdateCart(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if err := models.DB.Where("id = ?", input.ProductId).First(&models.Product{}).Error; err != nil {
+	if err := models.DB.Where(queryId, input.ProductId).First(&models.Product{}).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
@@ -62,8 +64,8 @@ func UpdateCart(c *gin.Context) {
 
 func DeleteCart(c *gin.Context) {
 	var cart models.Cart
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&cart).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
+	if err := models.DB.Where(queryId, c.Param("id")).First(&cart).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": errorNotFound})
 		return
 	}
 
@@ -72,11 +74,11 @@ func DeleteCart(c *gin.Context) {
 }
 func DeleteCartItem(c *gin.Context) {
 	var cart models.Cart
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&cart).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
+	if err := models.DB.Where(queryId, c.Param("id")).First(&cart).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": errorNotFound})
 		return
 	}
-	if err := models.DB.Where("id = ?", c.Param("productId")).First(&models.Product{}).Error; err != nil {
+	if err := models.DB.Where(queryId, c.Param("productId")).First(&models.Product{}).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}

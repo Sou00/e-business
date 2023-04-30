@@ -49,7 +49,7 @@ type UpdateCategoryInput struct {
 func UpdateCategory(c *gin.Context) {
 	var category models.Category
 	if err := models.DB.Where(queryId, c.Param("id")).First(&category).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": errorNotFound})
 		return
 	}
 
@@ -69,7 +69,7 @@ func UpdateCategory(c *gin.Context) {
 func DeleteCategory(c *gin.Context) {
 	var category models.Category
 	if err := models.DB.Where(queryId, c.Param("id")).First(&category).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": errorNotFound})
 		return
 	}
 
