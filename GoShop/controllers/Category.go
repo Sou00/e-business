@@ -26,7 +26,7 @@ func CreateCategory(c *gin.Context) {
 func GetCategory(c *gin.Context) {
 	var category models.Category
 
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&category).Error; err != nil {
+	if err := models.DB.Where(queryId, c.Param("id")).First(&category).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
@@ -48,7 +48,7 @@ type UpdateCategoryInput struct {
 
 func UpdateCategory(c *gin.Context) {
 	var category models.Category
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&category).Error; err != nil {
+	if err := models.DB.Where(queryId, c.Param("id")).First(&category).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
 		return
 	}
@@ -68,7 +68,7 @@ func UpdateCategory(c *gin.Context) {
 
 func DeleteCategory(c *gin.Context) {
 	var category models.Category
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&category).Error; err != nil {
+	if err := models.DB.Where(queryId, c.Param("id")).First(&category).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
 		return
 	}

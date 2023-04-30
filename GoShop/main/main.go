@@ -6,6 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const ProductsId = "/products/:id"
+const CategoriesId = "/categories/:id"
+
 func main() {
 	router := gin.Default()
 
@@ -13,15 +16,15 @@ func main() {
 
 	router.POST("/products", controllers.CreateProduct)
 	router.GET("/products", controllers.GetProducts)
-	router.GET("/products/:id", controllers.GetProduct)
-	router.PUT("/products/:id", controllers.UpdateProduct)
-	router.DELETE("/products/:id", controllers.DeleteProduct)
+	router.GET(ProductsId, controllers.GetProduct)
+	router.PUT(ProductsId, controllers.UpdateProduct)
+	router.DELETE(ProductsId, controllers.DeleteProduct)
 
 	router.POST("/categories", controllers.CreateCategory)
 	router.GET("/categories", controllers.GetCategories)
-	router.GET("/categories/:id", controllers.GetCategory)
-	router.PUT("/categories/:id", controllers.UpdateCategory)
-	router.DELETE("/categories/:id", controllers.DeleteCategory)
+	router.GET(CategoriesId, controllers.GetCategory)
+	router.PUT(CategoriesId, controllers.UpdateCategory)
+	router.DELETE(CategoriesId, controllers.DeleteCategory)
 
 	router.POST("/carts", controllers.CreateCart)
 	router.GET("/carts", controllers.GetCarts)

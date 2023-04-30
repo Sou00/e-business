@@ -47,7 +47,7 @@ class ProductController @Inject()(cc: ControllerComponents) extends AbstractCont
   }
   def delete(id: Int) = Action {
     val index = products.indexWhere(_.id == id)
-    val removed = products.remove(index)
+    products.remove(index)
     Ok("Deleted!")
   }
 

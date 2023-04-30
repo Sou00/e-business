@@ -49,14 +49,14 @@ class CategoryController @Inject()(cc: ControllerComponents) extends AbstractCon
   }
   def update(id: Int, name: String) = Action {
     val index = categories.indexWhere(_.id == id)
-    val removed = categories.remove(index)
+    categories.remove(index)
     val p = Category(id,name)
     categories.addOne(p)
     Ok("Updated!")
   }
   def delete(id: Int) = Action {
     val index = categories.indexWhere(_.id == id)
-    val removed = categories.remove(index)
+    categories.remove(index)
     Ok("Deleted!")
   }
 

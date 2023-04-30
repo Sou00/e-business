@@ -12,6 +12,8 @@ type CreateProductInput struct {
 	CategoryID uint   `json:"CategoryId" binding:"required"`
 }
 
+const queryId = "id = ?"
+
 func CreateProduct(c *gin.Context) {
 	var input CreateProductInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -20,7 +22,7 @@ func CreateProduct(c *gin.Context) {
 	}
 
 	product := models.Product{Name: input.Name, Price: input.Price, CategoryID: input.CategoryID}
-	if err := models.DB.Where("id = ?", input.CategoryID).First(&models.Category{}).Error; err != nil {
+	if err := models.DB.Where(queryId, input.CategoryID).First(&models.Category{}).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
@@ -32,7 +34,7 @@ func CreateProduct(c *gin.Context) {
 func GetProduct(c *gin.Context) {
 	var product models.Product
 
-	if err := models.DB.Preload("Category").Where("id = ?", c.Param("id")).First(&product).Error; err != nil {
+	if err := models.DB.Preload("Category").Where(queryId, c.Param("id")).First(&product).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
@@ -54,7 +56,7 @@ type UpdateProductInput struct {
 
 func UpdateProduct(c *gin.Context) {
 	var product models.Product
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&product).Error; err != nil {
+	if err := models.DB.Where(queryId, c.Param("id")).First(&product).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
 		return
 	}
@@ -74,7 +76,7 @@ func UpdateProduct(c *gin.Context) {
 
 func DeleteProduct(c *gin.Context) {
 	var product models.Product
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&product).Error; err != nil {
+	if err := models.DB.Where(queryId, c.Param("id")).First(&product).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
 		return
 	}

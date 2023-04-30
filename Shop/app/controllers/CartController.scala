@@ -54,14 +54,14 @@ class CartController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def delete(id: Int) = Action {
     val index = carts.indexWhere(_.id == id)
-    val removed = carts.remove(index)
+    carts.remove(index)
     Ok("Deleted!")
   }
 
   def deleteItem(id: Int,itemId: Int) = Action {
     val index = carts.indexWhere(_.id == id)
     val itemIndex = carts(index).products.indexWhere(_.id == itemId)
-    val removed = carts(index).products.remove(itemIndex)
+    carts(index).products.remove(itemIndex)
     Ok("Item deleted!")
   }
 
