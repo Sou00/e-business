@@ -3,50 +3,52 @@ package com.discordshop.plugins
 import com.discordshop.dao.dao
 import com.discordshop.models.*
 import com.slack.api.Slack
-import io.ktor.server.routing.*
-import io.ktor.server.response.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 const val CHANNEL_NAME = "#shop-bot"
 fun Application.configureRouting() {
-
     routing {
         post("/category") {
             val category = call.receive<Category>()
             dao.addCategory(category)
             call.respond(category)
         }
-        post("/product"){
-
+        post("/product") {
             val product = call.receive<Product>()
             dao.addProduct(product)
             call.respond(product)
         }
-        get("/product"){
+        get("/product") {
             call.respond(dao.allProducts())
         }
 
-        get("/order"){
+        get("/order") {
             call.respond(dao.allOrders())
-
         }
-        route("/payment"){
-            get {              call.respond(dao.allPayments())
+        route("/payment") {
+            get {
+                call.respond(dao.allPayments())
             }
-            post { val payment = call.receive<Payment>()
+            post {
+                val payment = call.receive<Payment>()
                 dao.addPayment(payment)
-                call.respond(payment) }
-            put {val payment = call.receive<Payment>()
+                call.respond(payment)
+            }
+            put {
+                val payment = call.receive<Payment>()
                 dao.updatePayment(payment)
-                call.respond(payment)  }
+                call.respond(payment)
+            }
         }
-        post("/cart"){
+        post("/cart") {
             val cart = call.receive<List<Order>>()
             dao.addOrders(cart)
             call.respond(cart)
         }
 
-        post("/slack/category" ) {
+        post("/slack/category") {
             val token = System.getenv("SLACK_TOKEN")
             val slack = Slack.getInstance()
             val categories = dao.allCategories()
@@ -60,8 +62,7 @@ fun Application.configureRouting() {
                         .text(result)
                 }
                 call.respondText("Response is: $response")
-            }
-            else{
+            } else {
                 val response = slack.methods(token).chatPostMessage {
                     it.channel(CHANNEL_NAME)
                         .text("There are no categories yet!")
@@ -69,13 +70,13 @@ fun Application.configureRouting() {
                 call.respondText("Response is: $response")
             }
         }
-        post("/slack/product" ) {
+        post("/slack/product") {
             val formParameters = call.receiveParameters()
             val text = formParameters["text"].toString()
             val token = System.getenv("SLACK_TOKEN")
             val slack = Slack.getInstance()
             val products = dao.allProducts().filter { it.category == text }
-            if(products.isNotEmpty()) {
+            if (products.isNotEmpty()) {
                 var result = text + "\n"
                 products.forEach {
                     result += it.id.toString() + ". " + it.name + "\n"
@@ -85,8 +86,7 @@ fun Application.configureRouting() {
                         .text(result)
                 }
                 call.respondText("Response is: $response")
-            }
-            else{
+            } else {
                 val response = slack.methods(token).chatPostMessage {
                     it.channel(CHANNEL_NAME)
                         .text("There are no products for that category yet!")
