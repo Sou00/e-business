@@ -5,6 +5,7 @@ import com.discordshop.dao.DatabaseFactory.nextValueOf
 import com.discordshop.dao.DatabaseFactory.seq
 import com.discordshop.models.*
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class DAOFacadeImpl : DAOFacade {
@@ -50,11 +51,15 @@ class DAOFacadeImpl : DAOFacade {
     }
 
     override suspend fun updateProduct(product: Product): Boolean = dbQuery {
-        TODO("Not yet implemented")
+        Products.update({ Products.id eq product.id }) {
+            it[name] = product.name
+            it[category] = product.category
+            it[price] = product.price
+        } > 0
     }
 
     override suspend fun deleteProduct(id: Int): Boolean = dbQuery {
-        TODO("Not yet implemented")
+        Products.deleteWhere { Products.id eq id } > 0
     }
 
     override suspend fun addOrders(orders: List<Order>): List<Order> = dbQuery {
@@ -77,6 +82,17 @@ class DAOFacadeImpl : DAOFacade {
         res
     }
 
+    override suspend fun updateOrder(order: Order): Boolean = dbQuery {
+        Orders.update({ Orders.id eq order.id }) {
+            it[productId] = order.productId
+            it[quantity] = order.quantity
+        } > 0
+    }
+
+    override suspend fun deleteOrder(id: Int): Boolean = dbQuery {
+        Orders.deleteWhere { Orders.id eq id } > 0
+    }
+
     override suspend fun addPayment(payment: Payment): Payment? = dbQuery {
         val insertStatement = Payments.insert {
             it[orderId] = payment.orderId
@@ -92,21 +108,69 @@ class DAOFacadeImpl : DAOFacade {
         insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToCategory)
     }
 
+    override suspend fun updateCategory(category: Category): Boolean = dbQuery {
+        Categories.update({ Categories.id eq category.id }) {
+            it[name] = category.name
+        } > 0
+    }
+
+    override suspend fun deleteCategory(id: Int): Boolean = dbQuery {
+        Categories.deleteWhere { Categories.id eq id } > 0
+    }
+
     override suspend fun allOrders(): List<Order> = dbQuery {
         Orders.selectAll().map(::resultRowToOrder)
     }
+
+    override suspend fun order(id: Int): List<Order> = dbQuery {
+        Orders
+            .select { Orders.id eq id }
+            .map(::resultRowToOrder)
+    }
+
+    override suspend fun addOrder(order: Order): Order? = dbQuery {
+        var seqId = 0
+        transaction {
+            seqId = nextValueOf(seq).toInt()
+        }
+        val insertStatement = Orders.insert {
+            it[id] = seqId
+            it[productId] = order.productId
+            it[quantity] = order.quantity
+        }
+        insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToOrder)
+    }
+
     override suspend fun allCategories(): List<Category> = dbQuery {
         Categories.selectAll().map(::resultRowToCategory)
+    }
+
+    override suspend fun category(id: Int): Category? = dbQuery {
+        Categories
+            .select { Categories.id eq id }
+            .map(::resultRowToCategory)
+            .singleOrNull()
     }
 
     override suspend fun allPayments(): List<Payment> = dbQuery {
         Payments.selectAll().map(::resultRowToPayment)
     }
 
+    override suspend fun payment(id: Int): Payment? = dbQuery {
+        Payments
+            .select { Payments.id eq id }
+            .map(::resultRowToPayment)
+            .singleOrNull()
+    }
+
     override suspend fun updatePayment(payment: Payment): Boolean = dbQuery {
         Payments.update({ Payments.id eq payment.id }) {
             it[paid] = payment.paid
         } > 0
+    }
+
+    override suspend fun deletePayment(id: Int): Boolean = dbQuery {
+        Payments.deleteWhere { Payments.id eq id } > 0
     }
 }
 

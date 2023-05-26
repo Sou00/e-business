@@ -56,4 +56,6 @@ ktlint {
     filter {
         exclude("**/style-violations.kt")
     }
+
+    disabledRules.set(setOf("no-wildcard-imports"))
 }

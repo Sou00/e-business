@@ -1,16 +1,15 @@
 import React,{useRef, useState, useEffect } from 'react';
 import axios from "axios";
-import {Product} from '../models/Product'
 import {Order} from "../models/Order";
 
 
 export default function Products({cart,setCart}){
-    const [products, setProducts] = useState([Product]);
+    const [products, setProducts] = useState([]);
     const [buy, setBuy]= useState(0)
     const [item,setItem]= useState(Order)
     const itemChanged = useRef(false)
     useEffect(() => {
-        axios.get('/product')
+        axios.get('http://127.0.0.1:8080/product')
             .then((res) => {
                 setProducts(res.data);
             })
@@ -34,21 +33,22 @@ export default function Products({cart,setCart}){
         }
     }, [buy])
 const buyItem = (product)=>{
-        let index = cart.findIndex(p=> p.productId===product.id)
-        if( index > -1){
-            cart[index].quantity++
+        if (cart !== undefined) {
+            let index = cart.findIndex(p => p.productId === product.id)
+            if (index > -1) {
+                cart[index].quantity++
+            } else {
+                let order = Order;
+                order.id = 1
+                order.productId = product.id;
+                order.quantity = 1
+                setItem(order)
+                itemChanged.current = true
+                setBuy(buy + 1)
+            }
         }
-        else {
-            let order = Order;
-            order.id = 1
-            order.productId = product.id;
-            order.quantity = 1
-            setItem(order)
-            itemChanged.current = true
-            setBuy(buy+1)
-        }
-
 }
+if(products !== undefined)
     return ( <div>{products.map((product) => (
         <div key={product.id}>
             {JSON.stringify(product)}
@@ -57,4 +57,5 @@ const buyItem = (product)=>{
     ))}
         </div>
         );
+else return <div>There are no products!</div>
 }

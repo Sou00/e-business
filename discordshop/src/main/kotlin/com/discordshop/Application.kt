@@ -27,6 +27,7 @@ fun Application.module() {
     }
     install(CORS) {
         anyHost()
+        allowMethod(HttpMethod.Put)
         allowHeader(HttpHeaders.ContentType)
     }
     DatabaseFactory.init()
