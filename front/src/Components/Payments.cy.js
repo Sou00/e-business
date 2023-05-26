@@ -1,6 +1,6 @@
 import React from 'react'
 import Payments from './Payments'
-import App from "../App";
+
 
 describe('<Payments />', () => {
   it('renders', () => {
