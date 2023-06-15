@@ -1,9 +1,6 @@
 package com.discordshop.dao
 
-import com.discordshop.models.Categories
-import com.discordshop.models.Orders
-import com.discordshop.models.Payments
-import com.discordshop.models.Products
+import com.discordshop.models.*
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -20,7 +17,7 @@ object DatabaseFactory {
         val database = Database.connect(jdbcURL, driverClassName)
 
         transaction(database) {
-            SchemaUtils.create(Categories, Products, Orders, Payments)
+            SchemaUtils.create(Categories, Products, Orders, Payments, Users)
             SchemaUtils.createSequence(seq)
         }
     }

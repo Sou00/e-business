@@ -5,12 +5,14 @@ import Cart from "./Components/Cart";
 import Payments from "./Components/Payments";
 import {useState} from "react";
 import Navbar from "./navbar/Navbar";
+import Login from "./Components/Login";
+import Register from "./Components/Register";
 
 function App() {
 
     const [cart, setCart] = useState([]);
     const [payments, setPayments] = useState([])
-console.log(cart)
+    const [user,setUser] = useState(null)
   return (
       <Router>
           <Navbar/>
@@ -32,6 +34,18 @@ console.log(cart)
                       element={
                           <Cart cart={cart} setCart={setCart}/>
                       }
+                  />
+              <Route
+                  path="/login"
+                  element={
+                      <Login user={user} setUser={setUser} />
+                  }
+              />
+                  <Route
+                  path="/register"
+                  element={
+                      <Register setUser={setUser}/>
+                  }
                   />
                   </Routes>
 

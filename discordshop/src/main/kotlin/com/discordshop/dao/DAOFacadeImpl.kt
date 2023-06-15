@@ -30,6 +30,12 @@ class DAOFacadeImpl : DAOFacade {
         total = row[Payments.total],
         paid = row[Payments.paid]
     )
+
+    private fun resultRowToUser(row: ResultRow) = User(
+        id = row[Users.id],
+        login = row[Users.login],
+        password = row[Users.password]
+    )
     override suspend fun allProducts(): List<Product> = dbQuery {
         Products.selectAll().map(::resultRowToProduct)
     }
@@ -171,6 +177,36 @@ class DAOFacadeImpl : DAOFacade {
 
     override suspend fun deletePayment(id: Int): Boolean = dbQuery {
         Payments.deleteWhere { Payments.id eq id } > 0
+    }
+
+    // Users
+    override suspend fun allUsers(): List<User> = dbQuery {
+        Users.selectAll().map(::resultRowToUser)
+    }
+
+    override suspend fun user(login: String): User? = dbQuery {
+        Users
+            .select { Users.login eq login }
+            .map(::resultRowToUser)
+            .singleOrNull()
+    }
+
+    override suspend fun addUser(user: User): User? = dbQuery {
+        val insertStatement = Users.insert {
+            it[login] = user.login
+            it[password] = user.password
+        }
+        insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToUser)
+    }
+
+    override suspend fun updateUser(user: User): Boolean = dbQuery {
+        Users.update({ Users.id eq user.id }) {
+            it[password] = user.password
+        } > 0
+    }
+
+    override suspend fun deleteUser(id: Int): Boolean = dbQuery {
+        Users.deleteWhere { Users.id eq id } > 0
     }
 }
 

@@ -115,7 +115,6 @@ fun Application.configureRouting() {
                 }
             }
         }
-
         route("/payment") {
             get {
                 call.respond(dao.allPayments())
@@ -151,7 +150,25 @@ fun Application.configureRouting() {
                 }
             }
         }
-
+        route("/user") {
+            get {
+                call.respond(dao.allUsers())
+            }
+            get("/{login}") {
+                val id = call.parameters["login"]!!
+                val user = dao.user(id)
+                if (user != null) {
+                    call.respond(user)
+                } else {
+                    call.respond("There is no user with login: $id")
+                }
+            }
+            post {
+                var user = call.receive<User>()
+                user = dao.addUser(user)!!
+                call.respond(user)
+            }
+        }
         post("/cart") {
             val cart = call.receive<List<Order>>()
             dao.addOrders(cart)

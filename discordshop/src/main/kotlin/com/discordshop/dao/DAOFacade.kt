@@ -30,4 +30,11 @@ interface DAOFacade {
     suspend fun addPayment(payment: Payment): Payment?
     suspend fun updatePayment(payment: Payment): Boolean
     suspend fun deletePayment(id: Int): Boolean
+
+    // User
+    suspend fun allUsers(): List<User>
+    suspend fun user(login: String): User?
+    suspend fun addUser(user: User): User?
+    suspend fun updateUser(user: User): Boolean
+    suspend fun deleteUser(id: Int): Boolean
 }
