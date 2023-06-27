@@ -9,6 +9,7 @@
 8. Login and registration - DiscordShop + front
 9. chatgpt
 10. back and fron deployed on heroku: https://ebusiness-front-3efaabc747be.herokuapp.com/
-Images deployed available here https://hub.docker.com/repository/docker/igorsou/
-my-application = backend ktor
-my-application-front = frontend react
+Images deployed available here:
+-backend ktor: https://hub.docker.com/r/igorsou/my-application
+-frontend react: https://hub.docker.com/r/igorsou/my-application-front
+
