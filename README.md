@@ -8,4 +8,4 @@
 7. Sonarcloud ![image](https://user-images.githubusercontent.com/69080602/235374067-1c0cca9b-172e-4ba9-9d32-0d797b6f97d2.png)
 8. Login and registration - DiscordShop + front
 9. chatgpt
-10.
+10. back and fron deployed on heroku: https://ebusiness-front-3efaabc747be.herokuapp.com/
