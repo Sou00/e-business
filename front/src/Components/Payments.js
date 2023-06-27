@@ -3,7 +3,7 @@ import axios from "axios";
 export default function Payments({payments,setPayments}){
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8080/payment')
+        axios.get(process.env.REACT_APP_BACKEND_URL+'payment')
             .then((res) => {
                 setPayments(res.data.filter(p => !p.paid));
             })
@@ -14,7 +14,7 @@ export default function Payments({payments,setPayments}){
 
     const pay =(payment)=>{
         payment.paid = true;
-        axios.put('http://127.0.0.1:8080/payment',payment,{headers: {'Content-Type': 'application/json'},method: "PUT"}).then(r => console.log(r.data));
+        axios.put(process.env.REACT_APP_BACKEND_URL+'payment',payment,{headers: {'Content-Type': 'application/json'},method: "PUT"}).then(r => console.log(r.data));
         setPayments(payments.filter(p => p.id !== payment.id))
     }
 

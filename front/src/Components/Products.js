@@ -9,7 +9,7 @@ export default function Products({cart,setCart}){
     const [item,setItem]= useState(Order)
     const itemChanged = useRef(false)
     useEffect(() => {
-        axios.get('http://127.0.0.1:8080/product')
+        axios.get(process.env.REACT_APP_BACKEND_URL+'product')
             .then((res) => {
                 setProducts(res.data);
             })

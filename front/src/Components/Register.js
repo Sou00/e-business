@@ -16,7 +16,7 @@ export default function Register({ setUser }) {
             login: loginRef.current.value,
             password: passwordRef.current.value
         }
-            axios.post(`http://127.0.0.1:8080/user`,user,{headers: {'Content-Type': 'application/json'}})
+            axios.post(process.env.REACT_APP_BACKEND_URL+'user',user,{headers: {'Content-Type': 'application/json'}})
                 .then((res) => {
                     setUser(res.data)
                     setError(false)

@@ -5,7 +5,7 @@ import axios from "axios";
 export default function Cart({cart, setCart}){
 
     const submit =(cart)=>{
-    axios.post('http://127.0.0.1:8080/cart',cart,{headers: {'Content-Type': 'application/json'}})
+    axios.post(process.env.REACT_APP_BACKEND_URL+'cart',cart,{headers: {'Content-Type': 'application/json'}})
         .then(r => console.log(r.data));
             setCart([])
     }

@@ -37,7 +37,7 @@ export default function Login({user, setUser }) {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-            axios.get(`http://127.0.0.1:8080/user/${loginRef.current.value}`)
+            axios.get(process.env.REACT_APP_BACKEND_URL+`user/${loginRef.current.value}`)
                 .then((res) => {
                     console.log(res.data)
                     if(res.data.id != null)
