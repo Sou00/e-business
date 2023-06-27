@@ -8,6 +8,9 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 const val CHANNEL_NAME = "#shop-bot"
+const val UPDATE_FAILED = "Update failed!"
+const val DELETE_FAILED = "Deletion failed!"
+const val DELETE_SUCCESS = "Deleted successfully!"
 fun Application.configureRouting() {
     routing {
         route("/product") {
@@ -33,15 +36,15 @@ fun Application.configureRouting() {
                 if (dao.updateProduct(product)) {
                     call.respond(product)
                 } else {
-                    call.respond("Update failed!")
+                    call.respond(UPDATE_FAILED)
                 }
             }
             delete("/{id}") {
                 val id = call.parameters["id"]!!.toInt()
                 if (dao.deleteProduct(id)) {
-                    call.respond("Deleted successfully!")
+                    call.respond(DELETE_SUCCESS)
                 } else {
-                    call.respond("Deletion failed!")
+                    call.respond(DELETE_FAILED)
                 }
             }
         }
@@ -68,15 +71,15 @@ fun Application.configureRouting() {
                 if (dao.updateCategory(category)) {
                     call.respond(category)
                 } else {
-                    call.respond("Update failed!")
+                    call.respond(UPDATE_FAILED)
                 }
             }
             delete("/{id}") {
                 val id = call.parameters["id"]!!.toInt()
                 if (dao.deleteCategory(id)) {
-                    call.respond("Deleted successfully!")
+                    call.respond(DELETE_SUCCESS)
                 } else {
-                    call.respond("Deletion failed!")
+                    call.respond(DELETE_FAILED)
                 }
             }
         }
@@ -103,15 +106,15 @@ fun Application.configureRouting() {
                 if (dao.updateOrder(order)) {
                     call.respond(order)
                 } else {
-                    call.respond("Update failed!")
+                    call.respond(UPDATE_FAILED)
                 }
             }
             delete("/{id}") {
                 val id = call.parameters["id"]!!.toInt()
                 if (dao.deleteOrder(id)) {
-                    call.respond("Deleted successfully!")
+                    call.respond(DELETE_SUCCESS)
                 } else {
-                    call.respond("Deletion failed!")
+                    call.respond(DELETE_FAILED)
                 }
             }
         }
@@ -138,15 +141,15 @@ fun Application.configureRouting() {
                 if (dao.updatePayment(payment)) {
                     call.respond(payment)
                 } else {
-                    call.respond("Update failed!")
+                    call.respond(UPDATE_FAILED)
                 }
             }
             delete("/{id}") {
                 val id = call.parameters["id"]!!.toInt()
                 if (dao.deletePayment(id)) {
-                    call.respond("Deleted successfully!")
+                    call.respond(DELETE_SUCCESS)
                 } else {
-                    call.respond("Deletion failed!")
+                    call.respond(DELETE_FAILED)
                 }
             }
         }
